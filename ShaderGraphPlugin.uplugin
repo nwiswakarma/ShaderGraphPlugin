@@ -1,0 +1,35 @@
+{
+	"FileVersion" : 1,
+	"Version" : 1,
+	"VersionName" : "1.0.0",
+	"FriendlyName" : "Shader Graph Plugin",
+	"CreatedBy" : "Nuraga Wiswakarma", 
+	"Description" : "",
+	"Category" : "Programming",
+	"EnabledByDefault" : "true",
+	"CanContainContent" : "false",
+	"Modules" :
+	[		
+		{
+			"Name" : "ShaderGraphPlugin",
+			"Type" : "Runtime",
+            "LoadingPhase": "PostConfigInit",
+			"WhitelistPlatforms" : [ "Win64", "Win32", "Mac" ]
+		}
+	],
+	"Plugins":
+    [
+		{
+			"Name" : "GenericWorkerThread",
+			"Enabled": true
+		},
+		{
+			"Name" : "GeometryUtilityLibrary",
+			"Enabled": true
+		},
+		{
+			"Name" : "RenderingUtilityLibrary",
+			"Enabled": true
+		}
+	]
+}
