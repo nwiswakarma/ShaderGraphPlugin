@@ -57,14 +57,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(DisplayName="Shader Graph Type"))
     TSubclassOf<USUGGraph> GraphType;
 
-#if WITH_EDITOR
-	UFUNCTION(meta=(CallInEditor="true"))
-    void CallEditorCustomEvent();
-
-    UFUNCTION(BlueprintImplementableEvent)
-	bool EditorCustomEvent();
-#endif
-
     UFUNCTION(BlueprintCallable)
 	UTextureRenderTarget2D* GetGraphOutput(FName OutputName);
 

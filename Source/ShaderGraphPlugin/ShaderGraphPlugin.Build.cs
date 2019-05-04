@@ -35,13 +35,6 @@ namespace UnrealBuildTool.Rules
         {
             PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-            string EnginePath = Path.GetFullPath(Target.RelativeEnginePath);
-
-            PrivateIncludePaths.AddRange(
-                new string[] {
-                    Path.Combine(EnginePath, "Source/Runtime/Engine/Private/")
-                } );
-
             PublicDependencyModuleNames.AddRange(
                 new string[] {
                     "Core",

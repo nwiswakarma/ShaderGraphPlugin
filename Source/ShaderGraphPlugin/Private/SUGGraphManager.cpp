@@ -28,13 +28,6 @@
 #include "SUGGraphManager.h"
 #include "Kismet/KismetRenderingLibrary.h"
 
-#if WITH_EDITOR
-void USUGGraphManager::CallEditorCustomEvent()
-{
-    EditorCustomEvent();
-}
-#endif
-
 UTextureRenderTarget2D* USUGGraphManager::GetGraphOutput(FName OutputName)
 {
     return IsValid(Graph)
