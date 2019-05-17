@@ -30,6 +30,7 @@
 #include "Engine/TextureRenderTarget2D.h"
 #include "SUGGraphTask.h"
 #include "Tasks/SUGGraphTask_ApplyMaterial.h"
+#include "Tasks/SUGGraphTask_AutoLevel.h"
 #include "Tasks/SUGGraphTask_DrawGeometry.h"
 #include "Tasks/SUGGraphTask_DrawMaterialPoly.h"
 #include "Tasks/SUGGraphTask_DrawMaterialQuad.h"
@@ -399,6 +400,42 @@ USUGGraphTask_DrawMaterialQuad* USUGGraphUtility::AddDrawTextureQuadTask(
             { },
             MappedTextures
             );
+    }
+
+    return Task;
+}
+
+USUGGraphTask_AutoLevel* USUGGraphUtility::AddAutoLevelTask(
+    USUGGraph* Graph,
+    TSubclassOf<USUGGraphTask_AutoLevel> TaskType,
+    const FSUGGraphTaskConfig& TaskConfig,
+    TEnumAsByte<enum ESUGGraphConfigMethod> ConfigMethod,
+    USUGGraphTask* OutputTask,
+    FSUGGraphTextureInput SourceTexture,
+    bool bApplyLevelMin,
+    bool bApplyLevelMax
+    )
+{
+    USUGGraphTask_AutoLevel* Task = nullptr;
+
+    if (IsValid(Graph))
+    {
+        if (TaskType.Get())
+        {
+            Task = NewObject<USUGGraphTask_AutoLevel>(Graph, TaskType);
+        }
+        else
+        {
+            Task = NewObject<USUGGraphTask_AutoLevel>(Graph);
+        }
+
+        if (IsValid(Task))
+        {
+            Task->SourceTexture = SourceTexture;
+            Task->bApplyLevelMin = bApplyLevelMin;
+            Task->bApplyLevelMax = bApplyLevelMax;
+            AddTask(*Graph, *Task, TaskConfig, ConfigMethod, OutputTask);
+        }
     }
 
     return Task;

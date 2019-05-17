@@ -37,13 +37,14 @@
 class UMaterialInterface;
 class UTextureRenderTarget2D;
 class USUGGraphTask;
-class USUGGraphTask_ResolveOutput;
+class USUGGraphTask_ApplyMaterial;
+class USUGGraphTask_AutoLevel;
 class USUGGraphTask_DrawTaskToOutput;
 class USUGGraphTask_DrawTaskToTexture;
 class USUGGraphTask_DrawGeometry;
 class USUGGraphTask_DrawMaterialPoly;
 class USUGGraphTask_DrawMaterialQuad;
-class USUGGraphTask_ApplyMaterial;
+class USUGGraphTask_ResolveOutput;
 
 UCLASS()
 class SHADERGRAPHPLUGIN_API USUGGraphUtility : public UBlueprintFunctionLibrary
@@ -182,5 +183,17 @@ public:
         FName ParameterCategoryName,
         FSUGGraphTextureInput SourceTexture,
         float Opacity = 1.f
+        );
+
+    UFUNCTION(BlueprintCallable, meta=(DefaultToSelf="Graph", DisplayName="Auto Level", AutoCreateRefTerm="TaskConfig,MaterialRef", AdvancedDisplay="Graph,TaskType,TaskConfig,ConfigMethod,OutputTask"))
+    static USUGGraphTask_AutoLevel* AddAutoLevelTask(
+        USUGGraph* Graph,
+        TSubclassOf<USUGGraphTask_AutoLevel> TaskType,
+        const FSUGGraphTaskConfig& TaskConfig,
+        TEnumAsByte<enum ESUGGraphConfigMethod> ConfigMethod,
+        USUGGraphTask* OutputTask,
+        FSUGGraphTextureInput SourceTexture,
+        bool bApplyLevelMin = true,
+        bool bApplyLevelMax = true
         );
 };
