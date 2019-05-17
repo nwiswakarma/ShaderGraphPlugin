@@ -145,12 +145,7 @@ public:
     bool HasGraphManager() const;
     void ExecuteGraph(USUGGraphManager* InGraphManager);
 
-    void ResolveOutputConfig(
-        FRULShaderOutputConfig& OutConfig,
-        TEnumAsByte<enum ESUGGraphConfigMethod> ConfigMethod,
-        USUGGraphTask* InputTask = nullptr
-        ) const;
-
+	void GetOutputConfig(FRULShaderOutputConfig& OutConfig) const;
 	FSUGGraphOutputEntry* GetOutput(FName OutputName);
 	UTextureRenderTarget2D* CreateOutputRenderTarget(FName OutputName, const FRULShaderOutputConfig& InOutputConfig);
 };

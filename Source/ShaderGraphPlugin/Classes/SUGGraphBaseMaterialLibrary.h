@@ -158,36 +158,4 @@ public:
         FSUGGraphTextureInput MaskTexture,
         float Opacity = 1.f
         );
-
-    UFUNCTION(BlueprintCallable, meta=(DefaultToSelf="Graph", DisplayName="Blur Filter 1D", AutoCreateRefTerm="TaskConfig,MaterialRef,ScalarParameters,VectorParameters,TextureParameters", AdvancedDisplay="Graph,TaskType,TaskConfig,ConfigMethod,OutputTask,ScalarParameters,VectorParameters,TextureParameters,ParameterCategoryName"))
-    static USUGGraphTask_BlurFilter1D* AddBlurFilter1DTask(
-        USUGGraph* Graph,
-        TSubclassOf<USUGGraphTask_BlurFilter1D> TaskType,
-        const FSUGGraphTaskConfig& TaskConfig,
-        TEnumAsByte<enum ESUGGraphConfigMethod> ConfigMethod,
-        USUGGraphTask* OutputTask,
-        const FSUGGraphMaterialRef& MaterialRef,
-        const TArray<FRULShaderScalarParameter>& ScalarParameters,
-        const TArray<FRULShaderVectorParameter>& VectorParameters,
-        const TArray<FSUGGraphTextureParameter>& TextureParameters,
-        FName ParameterCategoryName,
-        FSUGGraphTextureInput SourceTexture,
-        float BlurSampleCount = 1.f
-        );
-
-    UFUNCTION(BlueprintCallable, meta=(DefaultToSelf="Graph", DisplayName="Distance Filter", AutoCreateRefTerm="TaskConfig,MaterialRef,ScalarParameters,VectorParameters,TextureParameters", AdvancedDisplay="Graph,TaskType,TaskConfig,ConfigMethod,OutputTask,ScalarParameters,VectorParameters,TextureParameters,ParameterCategoryName"))
-    static USUGGraphTask_ApplyMaterial* AddDistanceFilterTask(
-        USUGGraph* Graph,
-        TSubclassOf<USUGGraphTask_ApplyMaterial> TaskType,
-        const FSUGGraphTaskConfig& TaskConfig,
-        TEnumAsByte<enum ESUGGraphConfigMethod> ConfigMethod,
-        USUGGraphTask* OutputTask,
-        const FSUGGraphMaterialRef& MaterialRef,
-        const TArray<FRULShaderScalarParameter>& ScalarParameters,
-        const TArray<FRULShaderVectorParameter>& VectorParameters,
-        const TArray<FSUGGraphTextureParameter>& TextureParameters,
-        FName ParameterCategoryName,
-        FSUGGraphTextureInput SourceTexture,
-        float DistanceSteps = 1.f
-        );
 };

@@ -35,8 +35,15 @@ void USUGGraphTask_DrawGeometry::Execute(USUGGraph* Graph)
 
     if (HasValidOutputRT())
     {
-        FRULShaderOutputConfig OutputConfig;
-        GetResolvedOutputConfig(*Graph, OutputConfig);
+        FIntPoint DrawDimension(Dimension);
+
+        if (DrawDimension.X <= 0 || DrawDimension.Y <= 0)
+        {
+            FRULShaderOutputConfig OutputConfig;
+            GetResolvedOutputConfig(OutputConfig);
+
+            DrawDimension = OutputConfig.GetDimension();
+        }
 
         if (Vertices.Num() == Colors.Num())
         {
@@ -44,7 +51,7 @@ void USUGGraphTask_DrawGeometry::Execute(USUGGraph* Graph)
                 Graph->GetGraphManager(),
                 Output.RenderTarget,
                 TaskConfig.DrawConfig,
-                OutputConfig.GetDimension(),
+                DrawDimension,
                 Vertices,
                 Colors,
                 Indices
@@ -56,7 +63,7 @@ void USUGGraphTask_DrawGeometry::Execute(USUGGraph* Graph)
                 Graph->GetGraphManager(),
                 Output.RenderTarget,
                 TaskConfig.DrawConfig,
-                OutputConfig.GetDimension(),
+                DrawDimension,
                 Vertices,
                 Indices
                 );

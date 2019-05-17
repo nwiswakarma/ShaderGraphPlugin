@@ -25,36 +25,48 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
 
-#include "Tasks/Materials/SUGGraphTask_BlurFilter1D.h"
+#include "Tasks/Materials/SUGGraphTask_ErodeFilter.h"
 #include "Shaders/RULShaderLibrary.h"
 #include "SUGGraph.h"
 
-void USUGGraphTask_BlurFilter1D::ExecuteMaterialFunction(USUGGraph& Graph, UMaterialInstanceDynamic& MID)
+void USUGGraphTask_ErodeFilter::ExecuteMaterialFunction(USUGGraph& Graph, UMaterialInstanceDynamic& MID)
 {
     check(Graph.HasGraphManager());
 
     ApplyMaterialParameters(MID);
 
-    FSUGGraphOutputRT SwapRT;
-    Graph.GetGraphManager()->FindFreeOutputRT(ResolvedOutputConfig, SwapRT);
-
     // Setup parameters multi parameters
+    if (IterationCount > 1)
+    {
+        FSUGGraphOutputRT SwapRT;
+        Graph.GetGraphManager()->FindFreeOutputRT(ResolvedOutputConfig, SwapRT);
 
-    TArray<FRULShaderMaterialParameterCollection> ParameterCollections;
+        TArray<FRULShaderMaterialParameterCollection> ParameterCollections;
 
-    FRULShaderMaterialParameterCollection Pass1;
-    Pass1.ScalarParameters.Emplace(DirectionXParameterName, 0.f);
-    Pass1.ScalarParameters.Emplace(DirectionYParameterName, 1.f);
-    Pass1.NamedTextures.Emplace(SourceTextureParameterName, TEXT("__SWAP_TEXTURE__"));
-    ParameterCollections.Emplace(Pass1);
+        FRULShaderMaterialParameterCollection Pass1;
+        Pass1.NamedTextures.Emplace(SourceTextureParameterName, TEXT("__SWAP_TEXTURE__"));
+        ParameterCollections.Emplace(Pass1);
 
-    URULShaderLibrary::ApplyMultiParametersMaterial(
-        Graph.GetGraphManager(),
-        &MID,
-        ParameterCollections,
-        TaskConfig.DrawConfig,
-        Output.RenderTarget,
-        SwapRT.RenderTarget,
-        1
-        );
+        URULShaderLibrary::ApplyMultiParametersMaterial(
+            Graph.GetGraphManager(),
+            &MID,
+            ParameterCollections,
+            TaskConfig.DrawConfig,
+            Output.RenderTarget,
+            SwapRT.RenderTarget,
+            1,
+            (IterationCount-2)
+            );
+    }
+    // Single iteration
+    else
+    if (IterationCount > 0)
+    {
+        URULShaderLibrary::ApplyMaterial(
+            Graph.GetGraphManager(),
+            &MID,
+            Output.RenderTarget,
+            TaskConfig.DrawConfig
+            );
+    }
 }

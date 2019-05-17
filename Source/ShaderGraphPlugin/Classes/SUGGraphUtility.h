@@ -99,7 +99,7 @@ public:
         UTextureRenderTarget2D* RenderTargetTexture
         );
 
-    UFUNCTION(BlueprintCallable, meta=(DefaultToSelf="Graph", DisplayName="Draw Points", AutoCreateRefTerm="TaskConfig,Colors", AdvancedDisplay="Graph,TaskType,TaskConfig,ConfigMethod,OutputTask"))
+    UFUNCTION(BlueprintCallable, meta=(DefaultToSelf="Graph", DisplayName="Draw Points", AutoCreateRefTerm="TaskConfig,Colors", AdvancedDisplay="Graph,TaskType,TaskConfig,ConfigMethod,OutputTask,Dimension"))
     static USUGGraphTask_DrawGeometry* AddDrawPointsTask(
         USUGGraph* Graph,
         TSubclassOf<USUGGraphTask_DrawGeometry> TaskType,
@@ -108,10 +108,11 @@ public:
         USUGGraphTask* OutputTask,
         const TArray<FVector2D>& Points,
         const TArray<FColor>& Colors,
-        const TArray<int32>& Indices
+        const TArray<int32>& Indices,
+        FIntPoint Dimension
         );
 
-    UFUNCTION(BlueprintCallable, meta=(DefaultToSelf="Graph", DisplayName="Draw Geometry", AutoCreateRefTerm="TaskConfig,Colors", AdvancedDisplay="Graph,TaskType,TaskConfig,ConfigMethod,OutputTask"))
+    UFUNCTION(BlueprintCallable, meta=(DefaultToSelf="Graph", DisplayName="Draw Geometry", AutoCreateRefTerm="TaskConfig,Colors", AdvancedDisplay="Graph,TaskType,TaskConfig,ConfigMethod,OutputTask,Dimension"))
     static USUGGraphTask_DrawGeometry* AddDrawGeometryTask(
         USUGGraph* Graph,
         TSubclassOf<USUGGraphTask_DrawGeometry> TaskType,
@@ -120,7 +121,8 @@ public:
         USUGGraphTask* OutputTask,
         const TArray<FVector>& Vertices,
         const TArray<FColor>& Colors,
-        const TArray<int32>& Indices
+        const TArray<int32>& Indices,
+        FIntPoint Dimension
         );
 
     UFUNCTION(BlueprintCallable, meta=(DefaultToSelf="Graph", AutoCreateRefTerm="TaskConfig,MaterialRef", AdvancedDisplay="Graph,TaskType,TaskConfig,ConfigMethod,OutputTask"))

@@ -50,7 +50,9 @@ protected:
         explicit FDependencyData(USUGGraphTask* InTask) : Task(InTask) {}
     };
 
+    FRULShaderOutputConfig ResolvedOutputConfig;
     FSUGGraphOutputRT Output;
+
     TArray<FSUGGraphOutputRT*> DependantOutputList;
     TMap<FName, FDependencyData> DependencyMap;
 
@@ -64,6 +66,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     TEnumAsByte<enum ESUGGraphConfigMethod> ConfigMethod;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    FName InputTaskName;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     bool bRequireOutput;
@@ -100,7 +105,17 @@ public:
     bool HasValidOutputRT() const;
     bool HasValidOutputRefId() const;
 
-    void GetResolvedOutputConfig(const USUGGraph& Graph, FRULShaderOutputConfig& OutputConfig) const;
+    static void ResolveOutputConfig(
+        FRULShaderOutputConfig& OutConfig,
+        const USUGGraph& Graph,
+        const FRULShaderOutputConfig& InConfig,
+        TEnumAsByte<enum ESUGGraphConfigMethod> InConfigMethod,
+        USUGGraphTask* InputTask = nullptr
+        );
+
+    void ResolveOutputConfig(const USUGGraph& Graph);
+    void GetResolvedOutputConfig(FRULShaderOutputConfig& OutConfig) const;
+    USUGGraphTask* GetInputTask() const;
 
     FSUGGraphOutputRT& GetOutputRef();
     void CopyOutputRef(FSUGGraphOutputRT& OutRef);

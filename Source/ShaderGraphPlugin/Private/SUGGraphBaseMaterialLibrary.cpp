@@ -28,8 +28,9 @@
 #include "SUGGraphBaseMaterialLibrary.h"
 
 #include "SUGGraph.h"
+#include "SUGGraphTask.h"
 #include "SUGGraphUtility.h"
-#include "Tasks/Materials/SUGGraphTask_BlurFilter1D.h"
+#include "Tasks/SUGGraphTask_ApplyMaterial.h"
 
 USUGGraphTask_ApplyMaterial* USUGGraphBaseMaterialLibrary::AddLevelsTask(
     USUGGraph* Graph,
@@ -346,141 +347,6 @@ USUGGraphTask_ApplyMaterial* USUGGraphBaseMaterialLibrary::AddBlendMaskedTask(
             *Graph,
             ParameterCategoryName,
             TEXT("BlendMasked"),
-            MappedScalars,
-            { },
-            MappedTextures
-            );
-    }
-
-    return Task;
-}
-
-USUGGraphTask_BlurFilter1D* USUGGraphBaseMaterialLibrary::AddBlurFilter1DTask(
-    USUGGraph* Graph,
-    TSubclassOf<USUGGraphTask_BlurFilter1D> TaskType,
-    const FSUGGraphTaskConfig& TaskConfig,
-    TEnumAsByte<enum ESUGGraphConfigMethod> ConfigMethod,
-    USUGGraphTask* OutputTask,
-    const FSUGGraphMaterialRef& MaterialRef,
-    const TArray<FRULShaderScalarParameter>& ScalarParameters,
-    const TArray<FRULShaderVectorParameter>& VectorParameters,
-    const TArray<FSUGGraphTextureParameter>& TextureParameters,
-    FName ParameterCategoryName,
-    FSUGGraphTextureInput SourceTexture,
-    float BlurSampleCount
-    )
-{
-    USUGGraphTask_BlurFilter1D* Task = nullptr;
-
-    if (IsValid(Graph))
-    {
-        if (TaskType.Get())
-        {
-            Task = NewObject<USUGGraphTask_BlurFilter1D>(Graph, TaskType);
-        }
-        else
-        {
-            Task = NewObject<USUGGraphTask_BlurFilter1D>(Graph);
-        }
-
-        if (IsValid(Task))
-        {
-            TArray<FScalarParam> MappedScalars;
-            TArray<FTextureParam> MappedTextures;
-
-            MappedScalars.Emplace(TEXT("BlurSampleCount"), BlurSampleCount);
-            MappedTextures.Emplace(TEXT("SourceTexture"), SourceTexture);
-
-            Task->MaterialRef = MaterialRef;
-
-            Task->DirectionXParameterName = Graph->GetParameterNameFromCategory(
-                ParameterCategoryName,
-                TEXT("BlurFilter1D"),
-                TEXT("BlurDirectionX")
-                );
-
-            Task->DirectionYParameterName = Graph->GetParameterNameFromCategory(
-                ParameterCategoryName,
-                TEXT("BlurFilter1D"),
-                TEXT("BlurDirectionY")
-                );
-
-            Task->SourceTextureParameterName = Graph->GetParameterNameFromCategory(
-                ParameterCategoryName,
-                TEXT("BlurFilter1D"),
-                TEXT("SourceTexture")
-                );
-
-            Task->SetParameters(
-                ScalarParameters,
-                VectorParameters,
-                TextureParameters
-                );
-
-            Task->SetParameters(
-                *Graph,
-                ParameterCategoryName,
-                TEXT("BlurFilter1D"),
-                MappedScalars,
-                { },
-                MappedTextures
-                );
-
-            USUGGraphUtility::AddTask(
-                *Graph,
-                *Task,
-                TaskConfig,
-                ConfigMethod,
-                OutputTask
-                );
-        }
-    }
-
-    return Task;
-}
-
-USUGGraphTask_ApplyMaterial* USUGGraphBaseMaterialLibrary::AddDistanceFilterTask(
-    USUGGraph* Graph,
-    TSubclassOf<USUGGraphTask_ApplyMaterial> TaskType,
-    const FSUGGraphTaskConfig& TaskConfig,
-    TEnumAsByte<enum ESUGGraphConfigMethod> ConfigMethod,
-    USUGGraphTask* OutputTask,
-    const FSUGGraphMaterialRef& MaterialRef,
-    const TArray<FRULShaderScalarParameter>& ScalarParameters,
-    const TArray<FRULShaderVectorParameter>& VectorParameters,
-    const TArray<FSUGGraphTextureParameter>& TextureParameters,
-    FName ParameterCategoryName,
-    FSUGGraphTextureInput SourceTexture,
-    float DistanceSteps
-    )
-{
-    USUGGraphTask_ApplyMaterial* Task;
-    Task = USUGGraphUtility::AddApplyMaterialTaskWithParameters(
-        Graph,
-        TaskType,
-        TaskConfig,
-        ConfigMethod,
-        OutputTask,
-        MaterialRef,
-        ScalarParameters,
-        VectorParameters,
-        TextureParameters
-        );
-
-    if (IsValid(Task))
-    {
-        TArray<FScalarParam> MappedScalars;
-        TArray<FTextureParam> MappedTextures;
-
-        MappedScalars.Emplace(TEXT("DistanceSteps"), DistanceSteps);
-        MappedTextures.Emplace(TEXT("SourceTexture"), SourceTexture);
-
-        check(Graph != nullptr);
-
-        Task->SetParameters(
-            *Graph,
-            ParameterCategoryName,
-            TEXT("DistanceFilter"),
             MappedScalars,
             { },
             MappedTextures

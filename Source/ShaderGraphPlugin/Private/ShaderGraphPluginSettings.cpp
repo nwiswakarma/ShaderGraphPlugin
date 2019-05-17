@@ -33,7 +33,7 @@ const URULShaderMaterialLibrary* UShaderGraphPluginSettings::GetMaterialLibrary(
     const UShaderGraphPluginSettings* Settings = GetDefault<UShaderGraphPluginSettings>();
     const URULShaderMaterialLibrary* Library = nullptr;
 
-    if (IsValid(Settings))
+    if (IsValid(Settings) && !!Settings->MaterialLibraryType)
     {
         Library = GetDefault<URULShaderMaterialLibrary>(*Settings->MaterialLibraryType);
     }

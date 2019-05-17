@@ -79,24 +79,9 @@ USUGGraphManager* USUGGraph::K2_GetGraphManager() const
     return GetGraphManager();
 }
 
-void USUGGraph::ResolveOutputConfig(
-    FRULShaderOutputConfig& OutConfig,
-    TEnumAsByte<enum ESUGGraphConfigMethod> ConfigMethod,
-    USUGGraphTask* InputTask
-    ) const
+void USUGGraph::GetOutputConfig(FRULShaderOutputConfig& OutConfig) const
 {
-    switch (ConfigMethod)
-    {
-        case RUL_CM_Parent:
-            OutConfig = OutputConfig;
-            break;
-
-        case RUL_CM_Input:
-            break;
-
-        case RUL_CM_Absolute:
-            break;
-    }
+    OutConfig = OutputConfig;
 }
 
 void USUGGraph::AssignOutput(USUGGraphTask& Task)
@@ -107,7 +92,7 @@ void USUGGraph::AssignOutput(USUGGraphTask& Task)
     if (! Task.HasValidOutput())
     {
         FRULShaderOutputConfig TaskOutputConfig;
-        Task.GetResolvedOutputConfig(*this, TaskOutputConfig);
+        Task.GetResolvedOutputConfig(TaskOutputConfig);
 
         GraphManager->FindFreeOutputRT(TaskOutputConfig, Task.GetOutputRef());
     }
@@ -211,6 +196,7 @@ void USUGGraph::InitializeTasks()
         {
             Task->Initialize(this);
             Task->K2_Initialize(this);
+            Task->ResolveOutputConfig(*this);
             Task->ResolveOutputDependency(*this);
         }
     }

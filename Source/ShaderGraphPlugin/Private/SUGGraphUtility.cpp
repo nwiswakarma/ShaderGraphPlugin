@@ -152,7 +152,8 @@ USUGGraphTask_DrawGeometry* USUGGraphUtility::AddDrawPointsTask(
     USUGGraphTask* OutputTask,
     const TArray<FVector2D>& Points,
     const TArray<FColor>& Colors,
-    const TArray<int32>& Indices
+    const TArray<int32>& Indices,
+    FIntPoint Dimension
     )
 {
     USUGGraphTask_DrawGeometry* Task = nullptr;
@@ -181,6 +182,7 @@ USUGGraphTask_DrawGeometry* USUGGraphUtility::AddDrawPointsTask(
             Task->Vertices = Vertices;
             Task->Colors = Colors;
             Task->Indices = Indices;
+            Task->Dimension = Dimension;
 
             AddTask(*Graph, *Task, TaskConfig, ConfigMethod, OutputTask);
         }
@@ -197,7 +199,8 @@ USUGGraphTask_DrawGeometry* USUGGraphUtility::AddDrawGeometryTask(
     USUGGraphTask* OutputTask,
     const TArray<FVector>& Vertices,
     const TArray<FColor>& Colors,
-    const TArray<int32>& Indices
+    const TArray<int32>& Indices,
+    FIntPoint Dimension
     )
 {
     USUGGraphTask_DrawGeometry* Task = nullptr;
@@ -218,6 +221,7 @@ USUGGraphTask_DrawGeometry* USUGGraphUtility::AddDrawGeometryTask(
             Task->Vertices = Vertices;
             Task->Colors = Colors;
             Task->Indices = Indices;
+            Task->Dimension = Dimension;
             AddTask(*Graph, *Task, TaskConfig, ConfigMethod, OutputTask);
         }
     }

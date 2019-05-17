@@ -28,27 +28,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SUGGraphTask.h"
-#include "SUGGraphTask_DrawGeometry.generated.h"
+#include "Tasks/SUGGraphTask_ApplyMaterial.h"
+#include "SUGGraphTask_ErodeFilter.generated.h"
+
+class UMaterialInterface;
+class UMaterialInstanceDynamic;
+class USUGGraph;
 
 UCLASS()
-class SHADERGRAPHPLUGIN_API USUGGraphTask_DrawGeometry : public USUGGraphTask
+class SHADERGRAPHPLUGIN_API USUGGraphTask_ErodeFilter : public USUGGraphTask_ApplyMaterial
 {
 	GENERATED_BODY()
+
+protected:
+
+    virtual void ExecuteMaterialFunction(USUGGraph& Graph, UMaterialInstanceDynamic& MID);
 
 public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<FVector> Vertices;
+    FName SourceTextureParameterName;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<FColor> Colors;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<int32> Indices;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FIntPoint Dimension;
-
-    virtual void Execute(USUGGraph* Graph) override;
+    int32 IterationCount;
 };

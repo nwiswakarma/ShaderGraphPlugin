@@ -106,6 +106,8 @@ struct SHADERGRAPHPLUGIN_API FSUGGraphTextureInput
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     USUGGraphTask* Task = nullptr;
+
+    bool HasValidInput() const;
 };
 
 USTRUCT(BlueprintType)

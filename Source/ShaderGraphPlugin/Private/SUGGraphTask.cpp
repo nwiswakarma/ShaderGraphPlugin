@@ -95,9 +95,67 @@ bool USUGGraphTask::HasValidOutputRefId() const
     return Output.RefId.IsValid();
 }
 
-void USUGGraphTask::GetResolvedOutputConfig(const USUGGraph& Graph, FRULShaderOutputConfig& OutputConfig) const
+void USUGGraphTask::ResolveOutputConfig(
+    FRULShaderOutputConfig& OutConfig,
+    const USUGGraph& Graph,
+    const FRULShaderOutputConfig& InConfig,
+    TEnumAsByte<enum ESUGGraphConfigMethod> InConfigMethod,
+    USUGGraphTask* InputTask
+    )
 {
-    Graph.ResolveOutputConfig(OutputConfig, ConfigMethod);
+    switch (InConfigMethod)
+    {
+        case RUL_CM_Parent:
+            Graph.GetOutputConfig(OutConfig);
+            break;
+
+        case RUL_CM_Input:
+        {
+            if (IsValid(InputTask))
+            {
+                InputTask->GetResolvedOutputConfig(OutConfig);
+            }
+            else
+            {
+                OutConfig = InConfig;
+            }
+        }
+        break;
+
+        case RUL_CM_Absolute:
+            OutConfig = InConfig;
+            break;
+    }
+}
+
+void USUGGraphTask::ResolveOutputConfig(const USUGGraph& Graph)
+{
+    ResolveOutputConfig(ResolvedOutputConfig, Graph, TaskConfig.OutputConfig, ConfigMethod, GetInputTask());
+}
+
+void USUGGraphTask::GetResolvedOutputConfig(FRULShaderOutputConfig& OutConfig) const
+{
+    OutConfig = ResolvedOutputConfig;
+}
+
+USUGGraphTask* USUGGraphTask::GetInputTask() const
+{
+    if (InputTaskName.IsValid() && ! InputTaskName.IsNone())
+    {
+        const FDependencyData* DependencyData(DependencyMap.Find(InputTaskName));
+
+        if (DependencyData)
+        {
+            return DependencyData->Task;
+        }
+    }
+    else
+    if (DependencyMap.Num() > 0)
+    {
+        const auto DependencyData(*DependencyMap.CreateConstIterator());
+        return DependencyData.Value.Task;
+    }
+    return nullptr;
 }
 
 FSUGGraphOutputRT& USUGGraphTask::GetOutputRef()
@@ -130,8 +188,8 @@ void USUGGraphTask::ResolveOutputDependency(const USUGGraph& Graph)
         FRULShaderOutputConfig SrcResolvedOutputConfig;
         FRULShaderOutputConfig DstResolvedOutputConfig;
 
-        GetResolvedOutputConfig(Graph, SrcResolvedOutputConfig);
-        OutputTask->GetResolvedOutputConfig(Graph, DstResolvedOutputConfig);
+        GetResolvedOutputConfig(SrcResolvedOutputConfig);
+        OutputTask->GetResolvedOutputConfig(DstResolvedOutputConfig);
 
         if (SrcResolvedOutputConfig.Compare(DstResolvedOutputConfig))
         {

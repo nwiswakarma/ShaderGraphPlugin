@@ -74,3 +74,8 @@ void FSUGGraphOutputRT::CreateReferenceId()
     ClearReferenceId();
     RefId = new FRefCountType;
 }
+
+bool FSUGGraphTextureInput::HasValidInput() const
+{
+    return IsValid(Texture) || IsValid(Task);
+}

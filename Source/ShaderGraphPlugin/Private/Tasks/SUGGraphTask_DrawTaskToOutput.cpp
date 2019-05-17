@@ -39,6 +39,7 @@ void USUGGraphTask_DrawTaskToOutput::Initialize(USUGGraph* Graph)
 {
     check(IsValid(Graph));
     DependencyMap.Emplace(TEXT("SourceOutput"), SourceTask);
+    InputTaskName = TEXT("SourceOutput");
 }
 
 void USUGGraphTask_DrawTaskToOutput::Execute(USUGGraph* Graph)
@@ -56,10 +57,16 @@ void USUGGraphTask_DrawTaskToOutput::Execute(USUGGraph* Graph)
     }
 
     FRULShaderOutputConfig SourceOutputConfig;
-    SourceTask->GetResolvedOutputConfig(*Graph, SourceOutputConfig);
+    SourceTask->GetResolvedOutputConfig(SourceOutputConfig);
 
     FRULShaderOutputConfig TargetOutputConfig(OutputEntry->OutputConfig);
-    Graph->ResolveOutputConfig(TargetOutputConfig, OutputEntry->ConfigMethod, SourceTask);
+    ResolveOutputConfig(
+        TargetOutputConfig,
+        *Graph,
+        OutputEntry->OutputConfig,
+        OutputEntry->ConfigMethod,
+        SourceTask
+        );
 
     UTextureRenderTarget2D* TargetOutputRT = Graph->CreateOutputRenderTarget(OutputName, TargetOutputConfig);
 
